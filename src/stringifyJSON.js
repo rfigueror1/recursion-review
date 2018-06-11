@@ -7,10 +7,10 @@ var stringifyJSON = function(obj) {
   // your code goes here
   var result = '';
   if(obj === null){
-    result = 'null';
+    return 'null';
   }
   if(obj === undefined){
-    result = 'undefined';
+    return 'undefined';
   }
   if(typeof obj === 'string'){
     return '"' + obj + '"';
@@ -34,9 +34,25 @@ var stringifyJSON = function(obj) {
         }
       }
     }
-
     result = result + ']';
-  }
+  } else {
+    if (Object.keys(obj).length === 0) {
+      return '{}';
+    } else {
+      result = result + '{'
+      for (var key in obj) {
+        if(typeof obj[key] == 'number'|| typeof obj[key] == 'string' || typeof obj[key] == 'boolean' || typeof obj[key] == null){
+          result = result + '"' + key  + '"' + ':' + stringifyJSON(obj[key]) + ','; // {key:value}
+          } else if (typeof obj[key] === 'object'){
+            result = result  + '"' + key  + '"' + ':' + stringifyJSON(obj[key])+',';
+          }
+      }
+        if (result[result.length - 1] === ',') {
+          result = result.slice(0, -1);
+        }
+        result = result + '}';
+      }
+    }
   return result;
 };
 
