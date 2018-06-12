@@ -4,19 +4,30 @@
 // };
 
 // But instead we're going to implement it from scratch:
-var getElementsByClassName = function(className) {
-  var completeBody = document.body.childNodes;
+var getElementsByClassName = function(className, currentNode) {
+  // var completeBody = document.body;
+  // currentNode = completeBody;
+  if (currentNode === undefined) {
+    currentNode = document.body;
+  }
   var result = [];
-  for(var i = 0; i<completeBody.length; i++){
-    if(completeBody[i].childNodes.length >= 1){
-      getElementsByClassName(completeBody[i]);
-    }else{
-      if(completeBody[i].className === className){
-        result.push(completeBody[i]);
-      }
+  var class_list = currentNode.classList;
+  for(var i = 0; i < class_list.length; i++){
+    // if(class_list.contains(className)){
+    //   result.push(currentNode);  
+    // }
+    if(class_list[i] === className) {
+      result.push(currentNode);  
     }
   }
-  console.log(result);
+  var children = currentNode.children;
+  if(children.length === 0){
+    return result;
+  } else {
+    for(var j = 0; j < children.length; j++){
+      result = result.concat(getElementsByClassName(className, children[j]));
+    }
+  }
   return result;  // your code here
 };
 //input is className and the DOM
